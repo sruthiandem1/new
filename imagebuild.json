@@ -1,0 +1,33 @@
+{
+	"builders": [{
+		"type": "azure-arm",
+		
+		"client_id": "",
+		"client_secret": "",
+		"tenant_id": "",
+		"subscription_id": "",
+		
+	"managed_image_name": "MyUbuntuImage",
+	"managed_image_resource_group_name": "arm",
+	
+	"os_type": "Linux",
+	"image_publisher": "Canonical",
+	"image_offer": "UbuntuServer",
+	"image_sku": "16.04-LTS",
+	
+	"location": "eastus",
+	"vm_size": "standard_B1ms"
+}],
+"provisioners":[{
+	"execute_command": "chmod +x {{ .path }}; {{ .Vars }} sudo -E sh '{{ .path }}'",
+	"inline": [
+	"apt-get update",
+	"apt-get install nginx -y",
+	"apt-get install stress -y",
+	"systemct1 enable nginx",
+	"/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+	],
+	"inline_shebang": "/bin/sh -x",
+	"type": "shell"
+	}]
+	}
